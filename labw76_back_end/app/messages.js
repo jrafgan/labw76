@@ -6,18 +6,31 @@ const router = express.Router();
 
 
 router.get('/messages', (req, res) => {
-    res.send(db.getItems());
+    console.log(nanoid());
+    console.log(req.query);
+    if (Object.keys(req.query).length !== 0) {
+        const date = new Date(req.query.datetime);
+        console.log('date typeof is ', typeof (date));
+        if (isNaN(date.getDate())) {
+            console.log(res.status(400).send('Wrong dateTime requested'))
+        } else {
+            let arr = db.getMessages();
+            arr.splice(-30);
+            res.send(arr);
+        }
+    } else {
+        let arr = db.getMessages();
+        arr.splice(-30);
+        res.send(arr);
+    }
+
+
 });
 
-router.get('/messages:id', (req, res) => {
-    res.send('A single product by Id will be here');
-});
-
-router.post('/', (req, res) => {
-    const product=req.body;
-    product.id = nanoid();
-    db.addItem(req.body);
-    res.send({message: 'OK'});
+router.post('/messages', (req, res) => {
+    const newMessage = {...req.body, "id": nanoid(), "dateTime": new Date().toISOString()};
+    db.addMessage(newMessage);
+    res.send(newMessage);
 });
 
 

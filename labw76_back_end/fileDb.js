@@ -15,8 +15,8 @@ module.exports = {
     getMessages() {
         return messages;
     },
-    addMessage(item) {
-        messages.push(item);
+    addMessage(newMessage) {
+        messages.push(newMessage);
         this.save();
     },
     save() {

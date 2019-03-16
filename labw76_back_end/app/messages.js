@@ -6,21 +6,23 @@ const router = express.Router();
 
 
 router.get('/messages', (req, res) => {
-    console.log(nanoid());
-    console.log(req.query);
+
+        console.log('begining of req.query ', req.query);
     if (Object.keys(req.query).length !== 0) {
-        const date = new Date(req.query.datetime);
-        console.log('date typeof is ', typeof (date));
+
+        const date = new Date(req.query.dateTime);
+        console.log('console.log datetime from frontend ', date);
+
         if (isNaN(date.getDate())) {
-            console.log(res.status(400).send('Wrong dateTime requested'))
+            res.status(400).send();
         } else {
             let arr = db.getMessages();
-            //arr.splice(-30);
+            arr = arr.filter(item=>item.dateTime > req.body.datetime);
             res.send(arr);
         }
     } else {
         let arr = db.getMessages();
-        //arr.splice(-30);
+        arr = arr.splice(arr.length-30, 30);
         res.send(arr);
     }
 
@@ -28,9 +30,14 @@ router.get('/messages', (req, res) => {
 });
 
 router.post('/messages', (req, res) => {
+    if (req.body.author  !== '' && req.body.message !== '') {
+    console.log('console.log req body ', req.body);
     const newMessage = {...req.body, "id": nanoid(), "dateTime": new Date().toISOString()};
     db.addMessage(newMessage);
     res.send(newMessage);
+    } else {
+        res.status(400).send('Cooooooool');
+    }
 });
 
 

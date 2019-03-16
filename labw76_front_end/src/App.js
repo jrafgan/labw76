@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import {connect} from "react-redux";
-import {changeValue, getMessages, sendToServer} from "./store/actions";
+import {changeValue, checkNewMessage, getMessages, sendToServer} from "./store/actions";
 import moment from "moment";
 
 //import Main from "./containers/main";
@@ -10,6 +10,9 @@ class App extends Component {
 
     componentDidMount() {
         this.props.getMessages();
+        this.interval = setInterval(() => {
+            this.getNewMessages()
+        }, 3000);
     }
 
     render() {
@@ -44,7 +47,8 @@ const mapDispatchToProps = dispatch => {
     return {
         getMessages:() => dispatch(getMessages()),
         changeValue: (e) => dispatch(changeValue(e)),
-        send: (e) => dispatch(sendToServer(e))
+        send: (e) => dispatch(sendToServer(e)),
+        checkNew: () => dispatch(checkNewMessage()),
     };
 };
 

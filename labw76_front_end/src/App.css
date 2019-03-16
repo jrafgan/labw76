@@ -1,6 +1,6 @@
 .li {
   display: grid;
-  grid-template-columns: 250px 200px auto;
+  grid-template-columns: 210px 200px auto;
 }
 
 body{

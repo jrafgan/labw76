@@ -15,12 +15,12 @@ router.get('/messages', (req, res) => {
             console.log(res.status(400).send('Wrong dateTime requested'))
         } else {
             let arr = db.getMessages();
-            arr.splice(-30);
+            //arr.splice(-30);
             res.send(arr);
         }
     } else {
         let arr = db.getMessages();
-        arr.splice(-30);
+        //arr.splice(-30);
         res.send(arr);
     }
 

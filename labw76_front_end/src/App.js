@@ -1,23 +1,18 @@
 import React, {Component} from 'react';
 import './App.css';
 import {connect} from "react-redux";
-import {changeValue, sendToServer} from "./store/actions";
+import {changeValue, getMessages, sendToServer} from "./store/actions";
+import moment from "moment";
 
 //import Main from "./containers/main";
 
 class App extends Component {
 
-    state = {
-        dateTime: '',
-    };
-
     componentDidMount() {
-        //this.loadData();
+        this.props.getMessages();
     }
 
     render() {
-        const date = new Date('2018-04-05T10:02:05.081Z');
-        const date2 = date.getDate();
         return (
             <div className="App">
                 <form onSubmit={this.props.send}>
@@ -27,7 +22,11 @@ class App extends Component {
                     <input name="author" type="text" placeholder="Student" onChange={this.props.changeValue}/>
                     <button type="submit" id="btn-addMsg" onClick={this.props.send}>Send</button>
                 </form>
-                <ol id="chatBox"/>
+                <ol id="chatBox">
+                    {this.props.apiMessages.map((item, ndx)=>(
+                        <li key={ndx} className='li'><p>{moment(item.dateTime).format('llll')}</p><p>{item.author}</p><p>{item.message}</p></li>
+                    ))}
+                </ol>
             </div>
         );
     }
@@ -37,11 +36,13 @@ const mapStateToProps = state => {
     return {
         author: state.author,
         message: state.message,
+        apiMessages: state.apiMessages,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        getMessages:() => dispatch(getMessages()),
         changeValue: (e) => dispatch(changeValue(e)),
         send: (e) => dispatch(sendToServer(e))
     };

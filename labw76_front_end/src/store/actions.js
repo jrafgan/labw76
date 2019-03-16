@@ -8,7 +8,6 @@ export const changeValue = (e) => {
 };
 
 export const fetchSuccess = (res) => {
-    console.log(res);
     return {type: FETCH_SUCCESS, res}
 };
 

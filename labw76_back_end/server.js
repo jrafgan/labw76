@@ -1,20 +1,18 @@
 const express = require('express');
-const Vigenere = require('caesar-salad').Vigenere;
+const db = require('./fileDb');
+const messages = require('./app/messages');
 const cors = require('cors');
-const app = express();
-const port = 3051;
 
+db.init();
+
+const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.post('/messages', (req, res)=> {
-    res.send('some message');
-});
+const port = 8000;
 
-app.get('/messages', (req, res)=> {
-    res.send('some message');
-});
+app.use('/messages', messages);
 
 app.listen(port, () => {
-    console.log('We"re live on http:localhost:' + port)
+    console.log(`Server started on ${port} port`);
 });

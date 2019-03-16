@@ -12,7 +12,6 @@ const Reducer = (state = initialState, action) => {
     switch (action.type) {
 
         case CHANGE_VALUE:
-            console.log(action.e);
             const {name, value} = action.e.currentTarget;
             return {...state, [name]: value};
 

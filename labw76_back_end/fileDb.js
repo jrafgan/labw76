@@ -12,8 +12,14 @@ module.exports = {
             messages = [];
         }
     },
-    getMessages() {
-        return messages;
+    get30Messages() {
+        let messagesArr=[];
+        const messages30 = messages.map((item, ndx)=>{
+            if (ndx >= messages.length - 30) {
+                messagesArr.push(item);
+            }
+        });
+        return messagesArr;
     },
     addMessage(newMessage) {
         messages.push(newMessage);

@@ -11,15 +11,20 @@ class App extends Component {
     componentDidMount() {
         this.props.getMessages();
         this.interval = setInterval(() => {
-            this.getNewMessages()
+            this.props.checkNew()
         }, 3000);
     }
+
+
+    componentWillUnmount() {
+        clearInterval(this.interval)
+    };
 
     render() {
         return (
             <div className="App">
                 <form onSubmit={this.props.send}>
-                    <label htmlFor="message">Messsage:</label>
+                    <label htmlFor="message">Message:</label>
                     <input name="message" type="text" placeholder="Some message ..." onChange={this.props.changeValue}/>
                     <label htmlFor="author">Author:</label>
                     <input name="author" type="text" placeholder="Student" onChange={this.props.changeValue}/>

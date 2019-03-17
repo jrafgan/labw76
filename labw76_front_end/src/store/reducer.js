@@ -1,4 +1,4 @@
-import {CHANGE_VALUE, FETCH_SUCCESS} from "./actions";
+import {CHANGE_VALUE, FETCH_SUCCESS, POST_SUCCESS} from "./actions";
 
 const initialState = {
     apiMessages: [],
@@ -16,7 +16,16 @@ const Reducer = (state = initialState, action) => {
             return {...state, [name]: value};
 
         case FETCH_SUCCESS:
-            return {...state, apiMessages: action.res};
+            console.log(action.res);
+            let dateTime = action.res[action.res.length - 1].dateTime;
+            console.log(dateTime);
+            return {...state, apiMessages: action.res, dateTime: dateTime};
+
+        case POST_SUCCESS:
+            console.log(action.res);
+            let copy = state.apiMessages;
+            copy.push(action.res);
+            return {...state, apiMessages: copy};
 
         default:
             return state;

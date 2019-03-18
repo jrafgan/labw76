@@ -4,6 +4,7 @@ export const CHANGE_VALUE = 'CHANGE_VALUE';
 export const FETCH_SUCCESS = 'FETCH_SUCCESS';
 export const POST_SUCCESS = 'POST_SUCCESS';
 export const CATCH_ERROR = 'CATCH_ERROR';
+export const CLOSE_NOTIFICATION = 'CLOSE_NOTIFICATION';
 
 export const changeValue = (e) => {
     return {type: CHANGE_VALUE, e}
@@ -23,31 +24,28 @@ export const catchError = (err) => {
 
 export const getMessages = () => {
     return (dispatch, getState) => {
-        //const state = getState();
-        axios.get('/messages').then(response => {
-            if (response.data.length !== 0) {
-                dispatch(fetchSuccess(response.data));
-            } else {
-                return;
-            }
 
-            console.log(response.data);
+        axios.get('/messages').then(response => {
+                dispatch(fetchSuccess(response.data));
+                console.log(response.data);
         }).catch(error => {
-            console.error('Wrong dateTime requested', error);
+            dispatch(catchError(error));
         });
     };
 
 };
 
+
 export const checkNewMessage = () => {
     return (dispatch, getState) => {
         const state = getState();
         if (state.dateTime !== '') {
-            console.log(state.dateTime);
             axios.get('/messages?dateTime=' + state.dateTime).then(response => {
-                //console.log(state.apiMessages);
+                if (response.data.length !== 0) {
+                    dispatch(postSuccess(response.data));
+                }
             }).catch(error => {
-                console.error('Wrong dateTime requested', error);
+                dispatch(catchError('Wrong dateTime requested ' + error));
             });
         }
     }
@@ -57,12 +55,9 @@ export const sendToServer = (e) => {
     e.preventDefault();
     return (dispatch, getState) => {
         const state = getState();
-
         axios.post('/messages', {author: state.author, message: state.message}).then(response => {
-            dispatch(postSuccess(response.data));
-            console.log(response.data);
         }).catch(error => {
-            console.error('Author & message can not be empty', error);
+            dispatch(catchError('Author & Message can not be empty \n ' + error));
         });
     };
 

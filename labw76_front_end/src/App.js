@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import './App.css';
 import {connect} from "react-redux";
-import {changeValue, checkNewMessage, getMessages, sendToServer} from "./store/actions";
+import {changeValue, checkNewMessage, CLOSE_NOTIFICATION, getMessages, sendToServer} from "./store/actions";
 import moment from "moment";
 
-//import Main from "./containers/main";
 
 class App extends Component {
 
@@ -14,7 +13,6 @@ class App extends Component {
             this.props.checkNew()
         }, 3000);
     }
-
 
     componentWillUnmount() {
         clearInterval(this.interval)
@@ -31,8 +29,9 @@ class App extends Component {
                     <button type="submit" id="btn-addMsg" onClick={this.props.send}>Send</button>
                 </form>
                 <ol id="chatBox">
+                    {this.props.error !== '' ? <div className="notification" onClick={this.props.closeNotification}>{this.props.error}</div> : null}
                     {this.props.apiMessages.map((item, ndx)=>(
-                        <li key={ndx} className='li'><p>{moment(item.dateTime).format('llll')}</p><p>{item.author}</p><p>{item.message}</p></li>
+                        <li key={item.id} className='li'><p>{moment(item.dateTime).format('llll')}</p><p>{item.author}</p><p>{item.message}</p></li>
                     ))}
                 </ol>
             </div>
@@ -45,6 +44,7 @@ const mapStateToProps = state => {
         author: state.author,
         message: state.message,
         apiMessages: state.apiMessages,
+        error: state.error,
     };
 };
 
@@ -54,6 +54,7 @@ const mapDispatchToProps = dispatch => {
         changeValue: (e) => dispatch(changeValue(e)),
         send: (e) => dispatch(sendToServer(e)),
         checkNew: () => dispatch(checkNewMessage()),
+        closeNotification: () => dispatch({type: CLOSE_NOTIFICATION})
     };
 };
 

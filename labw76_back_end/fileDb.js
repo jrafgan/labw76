@@ -13,13 +13,17 @@ module.exports = {
         }
     },
     get30Messages() {
-        let messagesArr=[];
-        const messages30 = messages.map((item, ndx)=>{
-            if (ndx >= messages.length - 30) {
-                messagesArr.push(item);
-            }
-        });
-        return messagesArr;
+        let messagesArr = [];
+        if (messages.length > 30) {
+            const messages30 = messages.map((item, ndx) => {
+                if (ndx >= messages.length - 30) {
+                    messagesArr.push(item);
+                }
+            });
+            return messagesArr;
+        } else {
+            return messages;
+        }
     },
     addMessage(newMessage) {
         messages.push(newMessage);
